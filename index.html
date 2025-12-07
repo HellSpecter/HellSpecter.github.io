@@ -110,6 +110,7 @@
             padding: 10px;
             text-align: center;
             border: 1px solid #ddd;
+            transition: background-color 0.2s ease;
         }
 
         tr:hover {
@@ -122,6 +123,16 @@
             height: 18px;
             cursor: pointer;
             accent-color: #667eea;
+        }
+
+        /* Подсветка ячейки когда чекбокс отмечен */
+        input[type="checkbox"]:checked {
+            accent-color: #27ae60;
+        }
+
+        td:has(> input[type="checkbox"]:checked) {
+            background-color: #d5f4e6;
+            font-weight: 600;
         }
 
         .row-label {
@@ -211,6 +222,15 @@
             color: #856404;
         }
 
+        .info {
+            background-color: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            color: #0c5460;
+        }
+
         .image-error {
             color: #999;
             font-size: 12px;
@@ -280,9 +300,12 @@
 
             <!-- Вопрос 2 -->
             <div class="form-section">
-                <h2>Вопрос 2: Треки 1-20</h2>
+                <h2>Вопрос 2: Треки категорий 1 и 2</h2>
                 <div class="warning">
                     ⚠️ <strong>Ограничения:</strong> В каждой строке - только 1 отметка | Каждому столбцу - ровно 2 отметки
+                </div>
+                <div class="info">
+                    ℹ️ <strong>Информация:</strong> В этом вопросе представлены треки из категорий 1 (Поп) и 2 (Рок). Определите, кто исполняет каждый трек.
                 </div>
                 <div class="table-wrapper">
                     <table>
@@ -311,9 +334,12 @@
 
             <!-- Вопрос 3 -->
             <div class="form-section">
-                <h2>Вопрос 3: Треки 1-20</h2>
+                <h2>Вопрос 3: Треки категорий 3 и 4</h2>
                 <div class="warning">
                     ⚠️ <strong>Ограничения:</strong> В каждой строке - только 1 отметка | Каждому столбцу - ровно 2 отметки
+                </div>
+                <div class="info">
+                    ℹ️ <strong>Информация:</strong> В этом вопросе представлены треки из категорий 3 (Джаз) и 4 (Электроника). Определите, кто исполняет каждый трек.
                 </div>
                 <div class="table-wrapper">
                     <table>
@@ -342,9 +368,12 @@
 
             <!-- Вопрос 4 -->
             <div class="form-section">
-                <h2>Вопрос 4: Треки 1-10</h2>
+                <h2>Вопрос 4: Бонус треки</h2>
                 <div class="warning">
                     ⚠️ <strong>Ограничение:</strong> В каждой строке - только 1 отметка | Каждому столбцу - ровно 1 отметка
+                </div>
+                <div class="info">
+                    ℹ️ <strong>Информация:</strong> В этом вопросе представлены бонус треки со всех категорий. Выберите правильного исполнителя для каждого трека.
                 </div>
                 <div class="table-wrapper">
                     <table>
@@ -536,7 +565,7 @@
                 
                 if (q2Answers.length > 0) {
                     const entryId = ENTRY_IDS.q2[trackNum - 1];
-                    formData.append(`entry.${entryId}`, q2Answers[0]); // Берем первый (и единственный) выбранный элемент
+                    formData.append(`entry.${entryId}`, q2Answers[0]);
                 }
             }
 
@@ -550,7 +579,7 @@
                 
                 if (q3Answers.length > 0) {
                     const entryId = ENTRY_IDS.q3[trackNum - 1];
-                    formData.append(`entry.${entryId}`, q3Answers[0]); // Берем первый (и единственный) выбранный элемент
+                    formData.append(`entry.${entryId}`, q3Answers[0]);
                 }
             }
 
@@ -564,7 +593,7 @@
                 
                 if (q4Answers.length > 0) {
                     const entryId = ENTRY_IDS.q4[trackNum - 1];
-                    formData.append(`entry.${entryId}`, q4Answers[0]); // Берем первый (и единственный) выбранный элемент
+                    formData.append(`entry.${entryId}`, q4Answers[0]);
                 }
             }
 
@@ -602,6 +631,3 @@
     </script>
 </body>
 </html>
-
-
-
