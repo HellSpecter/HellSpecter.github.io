@@ -3,20 +3,469 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мой сайт</title>
+    <title>Музыкальная викторина №2</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-            text-align: center;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        h1 { color: #333; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .form-section {
+            margin-bottom: 40px;
+        }
+
+        .form-section h2 {
+            color: #667eea;
+            font-size: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .radio-item input[type="radio"] {
+            margin-right: 8px;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+
+        .radio-item label {
+            cursor: pointer;
+            color: #333;
+        }
+
+        /* Таблица для вопросов 2 и 3 */
+        .table-wrapper {
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        thead {
+            background-color: #667eea;
+            color: white;
+        }
+
+        th {
+            padding: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background-color: #f8f9ff;
+        }
+
+        /* Checkbox стили */
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .row-label {
+            font-weight: 600;
+            color: #333;
+            text-align: left;
+        }
+
+        /* Ошибка */
+        .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* Кнопка отправки */
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .success-message {
+            display: none;
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .counter {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
-    <h1>Привет! Это мой сайт 👋</h1>
-    <p>Добро пожаловать на мою страницу GitHub Pages</p>
+    <div class="container">
+        <div class="header">
+            <h1>🎵 Музыкальная викторина №2</h1>
+            <p>На видео есть номер трека, сопоставьте номер трека с предполагаемым человеком</p>
+            <p><em>В конце я скажу, кто больше всех угадал и опубликую статистику</em></p>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            ✅ Форма успешно отправлена!
+        </div>
+
+        <form id="musicForm">
+            <!-- Вопрос 1 -->
+            <div class="form-section">
+                <h2>Вопрос 1: Вы кто?</h2>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="q1_1" name="question1" value="Никита А." required>
+                        <label for="q1_1">Никита А.</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="q1_2" name="question1" value="Тимур">
+                        <label for="q1_2">Тимур</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="q1_3" name="question1" value="Юра">
+                        <label for="q1_3">Юра</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="q1_4" name="question1" value="Андрей">
+                        <label for="q1_4">Андрей</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="q1_5" name="question1" value="Вася">
+                        <label for="q1_5">Вася</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="q1_6" name="question1" value="Артём">
+                        <label for="q1_6">Артём</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="q1_7" name="question1" value="Коля">
+                        <label for="q1_7">Коля</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="q1_8" name="question1" value="Дима">
+                        <label for="q1_8">Дима</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="q1_9" name="question1" value="Альп">
+                        <label for="q1_9">Альп</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="q1_10" name="question1" value="Никита Г.">
+                        <label for="q1_10">Никита Г.</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вопрос 2 -->
+            <div class="form-section">
+                <h2>Вопрос 2: Треки 1-20</h2>
+                <p style="color: #666; margin-bottom: 15px;">⚠️ Каждому столбцу нужно ровно 2 отметки</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>Никита А.</th>
+                                <th>Тимур</th>
+                                <th>Юра</th>
+                                <th>Андрей</th>
+                                <th>Вася</th>
+                                <th>Артём</th>
+                                <th>Коля</th>
+                                <th>Дима</th>
+                                <th>Альп</th>
+                                <th>Никита Г.</th>
+                            </tr>
+                        </thead>
+                        <tbody id="question2Body">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="error-message" id="q2Error"></div>
+                <div id="q2Counter" class="counter"></div>
+            </div>
+
+            <!-- Вопрос 3 -->
+            <div class="form-section">
+                <h2>Вопрос 3: Треки 1-20</h2>
+                <p style="color: #666; margin-bottom: 15px;">⚠️ Каждому столбцу нужно ровно 2 отметки</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>Никита А.</th>
+                                <th>Тимур</th>
+                                <th>Юра</th>
+                                <th>Андрей</th>
+                                <th>Вася</th>
+                                <th>Артём</th>
+                                <th>Коля</th>
+                                <th>Дима</th>
+                                <th>Альп</th>
+                                <th>Никита Г.</th>
+                            </tr>
+                        </thead>
+                        <tbody id="question3Body">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="error-message" id="q3Error"></div>
+                <div id="q3Counter" class="counter"></div>
+            </div>
+
+            <!-- Вопрос 4 -->
+            <div class="form-section">
+                <h2>Вопрос 4: Треки 1-10</h2>
+                <p style="color: #666; margin-bottom: 15px;">⚠️ Каждому столбцу нужно ровно 1 отметка</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>Никита А.</th>
+                                <th>Тимур</th>
+                                <th>Юра</th>
+                                <th>Андрей</th>
+                                <th>Вася</th>
+                                <th>Артём</th>
+                                <th>Коля</th>
+                                <th>Дима</th>
+                                <th>Альп</th>
+                                <th>Никита Г.</th>
+                            </tr>
+                        </thead>
+                        <tbody id="question4Body">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="error-message" id="q4Error"></div>
+                <div id="q4Counter" class="counter"></div>
+            </div>
+
+            <button type="submit" class="submit-btn">Отправить ответы</button>
+        </form>
+    </div>
+
+    <script>
+        const NAMES = ['Никита А.', 'Тимур', 'Юра', 'Андрей', 'Вася', 'Артём', 'Коля', 'Дима', 'Альп', 'Никита Г.'];
+
+        const ENTRY_IDS = {
+            question1: ['1654513123', '900977987', '865330579', '1911619587', '1541916157', '971242591', '1433716698', '932251529', '1265296340', '1361763527', '1915403637', '415750917', '149424886', '2146673989', '679252067', '1875934641', '294970993', '1770499325', '1791198223', '1335292671', '421314620'],
+            question2: ['1266505640', '869736572', '666765757', '1148246175', '623442061', '659852939', '106523912', '182975063', '1347681721', '661395707', '1769264699', '1025031653', '1780183676', '390786432', '757093024', '1778898336', '1398781992', '882237723'],
+            question3: ['835570859', '342320418', '1945186855', '837280174', '961763830', '336956217', '1051071271', '476970349', '1190636999', '814519507', '1978605574', '915262374'],
+            question4: []
+        };
+
+        // Генерируем таблицы
+        function generateTable(questionNum, rows) {
+            const tbody = document.getElementById(`question${questionNum}Body`);
+            for (let i = 1; i <= rows; i++) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td class="row-label">${i}</td>`;
+                
+                NAMES.forEach((name, idx) => {
+                    const td = document.createElement('td');
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.name = `q${questionNum}_${idx}`;
+                    checkbox.value = name;
+                    checkbox.className = `q${questionNum}-col-${idx}`;
+                    checkbox.addEventListener('change', () => validateTable(questionNum));
+                    td.appendChild(checkbox);
+                    tr.appendChild(td);
+                });
+                
+                tbody.appendChild(tr);
+            }
+        }
+
+        // Валидация таблиц
+        function validateTable(questionNum) {
+            let maxChecks = questionNum === 4 ? 1 : 2;
+            let isValid = true;
+            let errorMsg = '';
+
+            for (let colIdx = 0; colIdx < NAMES.length; colIdx++) {
+                const checkboxes = document.querySelectorAll(`.q${questionNum}-col-${colIdx}`);
+                const checkedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
+
+                if (checkedCount !== maxChecks) {
+                    isValid = false;
+                }
+            }
+
+            // Отображение ошибок
+            const errorEl = document.getElementById(`q${questionNum}Error`);
+            const counterEl = document.getElementById(`q${questionNum}Counter`);
+            
+            if (!isValid) {
+                errorEl.textContent = `❌ Каждому столбцу должно быть ровно ${maxChecks} отметок`;
+                errorEl.classList.add('show');
+            } else {
+                errorEl.classList.remove('show');
+                errorEl.textContent = '';
+            }
+
+            // Показываем счетчик
+            let counts = {};
+            for (let colIdx = 0; colIdx < NAMES.length; colIdx++) {
+                const checkboxes = document.querySelectorAll(`.q${questionNum}-col-${colIdx}`);
+                const checkedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
+                counts[NAMES[colIdx]] = checkedCount;
+            }
+            
+            const countStr = Object.entries(counts)
+                .map(([name, count]) => `${name}: ${count}/${maxChecks}`)
+                .join(' | ');
+            counterEl.textContent = countStr;
+
+            return isValid;
+        }
+
+        // Инициализация
+        generateTable(2, 20);
+        generateTable(3, 20);
+        generateTable(4, 10);
+
+        // Отправка формы
+        document.getElementById('musicForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Проверяем все таблицы
+            const isValid2 = validateTable(2);
+            const isValid3 = validateTable(3);
+            const isValid4 = validateTable(4);
+
+            if (!isValid2 || !isValid3 || !isValid4) {
+                alert('⚠️ Пожалуйста, исправьте ошибки в таблицах!');
+                return;
+            }
+
+            // Собираем данные
+            const formData = new FormData();
+            const q1 = document.querySelector('input[name="question1"]:checked').value;
+            formData.append('entry.1654513123', q1);
+
+            // Собираем данные таблиц
+            for (let q = 2; q <= 4; q++) {
+                const maxRows = q === 4 ? 10 : 20;
+                for (let row = 0; row < maxRows; row++) {
+                    for (let col = 0; col < NAMES.length; col++) {
+                        const checkbox = document.querySelector(
+                            `input[name="q${q}_${col}"]:nth-of-type(${row + 1})`
+                        );
+                        // Здесь нужно правильно собрать данные
+                    }
+                }
+            }
+
+            // Отправляем в Google Forms
+            try {
+                await fetch('https://docs.google.com/forms/u/0/d/e/1FAIpQLSesxqw4dPHwHy1HwrymLnrjZB9RSnZf6yGYxuHdnuoBAuKq3g/formResponse', {
+                    method: 'POST',
+                    body: formData,
+                    mode: 'no-cors'
+                });
+
+                document.getElementById('successMessage').classList.add('show');
+                document.getElementById('musicForm').reset();
+                setTimeout(() => {
+                    document.getElementById('successMessage').classList.remove('show');
+                }, 3000);
+
+            } catch (error) {
+                console.error('Ошибка:', error);
+                alert('Ошибка при отправке формы');
+            }
+        });
+    </script>
 </body>
 </html>
