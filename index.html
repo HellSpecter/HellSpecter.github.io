@@ -19,7 +19,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             background: white;
             border-radius: 12px;
@@ -94,6 +94,9 @@
         thead {
             background-color: #667eea;
             color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         th {
@@ -124,7 +127,24 @@
         .row-label {
             font-weight: 600;
             color: #333;
-            text-align: left;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .row-image {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-width: 150px;
+        }
+
+        .row-image img {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #ddd;
         }
 
         /* Ошибка */
@@ -152,7 +172,7 @@
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        .submit-btn:hover {
+        .submit-btn:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
         }
@@ -181,6 +201,21 @@
             color: #999;
             margin-top: 5px;
         }
+
+        .warning {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            color: #856404;
+        }
+
+        .image-error {
+            color: #999;
+            font-size: 12px;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
@@ -192,7 +227,7 @@
         </div>
 
         <div class="success-message" id="successMessage">
-            ✅ Форма успешно отправлена!
+            ✅ Форма успешно отправлена! Спасибо за ответы!
         </div>
 
         <form id="musicForm">
@@ -246,7 +281,9 @@
             <!-- Вопрос 2 -->
             <div class="form-section">
                 <h2>Вопрос 2: Треки 1-20</h2>
-                <p style="color: #666; margin-bottom: 15px;">⚠️ Каждому столбцу нужно ровно 2 отметки</p>
+                <div class="warning">
+                    ⚠️ <strong>Ограничения:</strong> В каждой строке - только 1 отметка | Каждому столбцу - ровно 2 отметки
+                </div>
                 <div class="table-wrapper">
                     <table>
                         <thead>
@@ -275,7 +312,9 @@
             <!-- Вопрос 3 -->
             <div class="form-section">
                 <h2>Вопрос 3: Треки 1-20</h2>
-                <p style="color: #666; margin-bottom: 15px;">⚠️ Каждому столбцу нужно ровно 2 отметки</p>
+                <div class="warning">
+                    ⚠️ <strong>Ограничения:</strong> В каждой строке - только 1 отметка | Каждому столбцу - ровно 2 отметки
+                </div>
                 <div class="table-wrapper">
                     <table>
                         <thead>
@@ -304,7 +343,9 @@
             <!-- Вопрос 4 -->
             <div class="form-section">
                 <h2>Вопрос 4: Треки 1-10</h2>
-                <p style="color: #666; margin-bottom: 15px;">⚠️ Каждому столбцу нужно ровно 1 отметка</p>
+                <div class="warning">
+                    ⚠️ <strong>Ограничение:</strong> В каждой строке - только 1 отметка | Каждому столбцу - ровно 1 отметка
+                </div>
                 <div class="table-wrapper">
                     <table>
                         <thead>
@@ -330,18 +371,22 @@
                 <div id="q4Counter" class="counter"></div>
             </div>
 
-            <button type="submit" class="submit-btn">Отправить ответы</button>
+            <button type="submit" class="submit-btn" id="submitBtn">Отправить ответы</button>
         </form>
     </div>
 
     <script>
         const NAMES = ['Никита А.', 'Тимур', 'Юра', 'Андрей', 'Вася', 'Артём', 'Коля', 'Дима', 'Альп', 'Никита Г.'];
+        
+        // ID Google Forms
+        const FORM_ID = '1FAIpQLSesxqw4dPHwHy1HwrymLnrjZB9RSnZf6yGYxuHdnuoBAuKq3g';
 
+        // Entry IDs для каждого вопроса
         const ENTRY_IDS = {
-            question1: ['1654513123', '900977987', '865330579', '1911619587', '1541916157', '971242591', '1433716698', '932251529', '1265296340', '1361763527', '1915403637', '415750917', '149424886', '2146673989', '679252067', '1875934641', '294970993', '1770499325', '1791198223', '1335292671', '421314620'],
-            question2: ['1266505640', '869736572', '666765757', '1148246175', '623442061', '659852939', '106523912', '182975063', '1347681721', '661395707', '1769264699', '1025031653', '1780183676', '390786432', '757093024', '1778898336', '1398781992', '882237723'],
-            question3: ['835570859', '342320418', '1945186855', '837280174', '961763830', '336956217', '1051071271', '476970349', '1190636999', '814519507', '1978605574', '915262374'],
-            question4: []
+            q1: '1654513123',
+            q2: ['900977987', '865330579', '1911619587', '1541916157', '971242591', '1433716698', '932251529', '1265296340', '1361763527', '1915403637', '415750917', '149424886', '2146673989', '679252067', '1875934641', '294970993', '1770499325', '1791198223', '1335292671', '421314620'],
+            q3: ['1266505640', '869736572', '666765757', '1148246175', '623442061', '106523912', '182975063', '1347681721', '661395707', '1769264699', '1025031653', '1780183676', '390786432', '757093024', '1778898336', '1398781992', '882237723', '835570859', '342320418'],
+            q4: ['1945186855', '837280174', '961763830', '336956217', '1051071271', '476970349', '1190636999', '814519507', '1978605574', '915262374']
         };
 
         // Генерируем таблицы
@@ -349,16 +394,50 @@
             const tbody = document.getElementById(`question${questionNum}Body`);
             for (let i = 1; i <= rows; i++) {
                 const tr = document.createElement('tr');
-                tr.innerHTML = `<td class="row-label">${i}</td>`;
+                tr.dataset.rowNum = i;
+                tr.dataset.question = questionNum;
                 
+                // Ячейка с номером и картинкой
+                const rowCell = document.createElement('td');
+                rowCell.className = 'row-image';
+                
+                const numSpan = document.createElement('span');
+                numSpan.textContent = i;
+                rowCell.appendChild(numSpan);
+                
+                const img = document.createElement('img');
+                img.src = `images/${i}.jpg`;
+                img.alt = `Трек ${i}`;
+                img.onerror = function() {
+                    this.style.display = 'none';
+                };
+                rowCell.appendChild(img);
+                tr.appendChild(rowCell);
+                
+                // Ячейки с checkboxes
                 NAMES.forEach((name, idx) => {
                     const td = document.createElement('td');
                     const checkbox = document.createElement('input');
                     checkbox.type = 'checkbox';
-                    checkbox.name = `q${questionNum}_${idx}`;
+                    checkbox.name = `q${questionNum}_row${i}_col${idx}`;
                     checkbox.value = name;
-                    checkbox.className = `q${questionNum}-col-${idx}`;
-                    checkbox.addEventListener('change', () => validateTable(questionNum));
+                    checkbox.className = `q${questionNum}-col-${idx} q${questionNum}-row-${i}`;
+                    checkbox.dataset.row = i;
+                    checkbox.dataset.col = idx;
+                    checkbox.dataset.question = questionNum;
+                    
+                    checkbox.addEventListener('change', (e) => {
+                        // Ограничение: только 1 отметка в строке
+                        if (e.target.checked) {
+                            document.querySelectorAll(`.q${questionNum}-row-${i}`).forEach(cb => {
+                                if (cb !== e.target && cb.checked) {
+                                    cb.checked = false;
+                                }
+                            });
+                        }
+                        validateTable(questionNum);
+                    });
+                    
                     td.appendChild(checkbox);
                     tr.appendChild(td);
                 });
@@ -369,15 +448,15 @@
 
         // Валидация таблиц
         function validateTable(questionNum) {
-            let maxChecks = questionNum === 4 ? 1 : 2;
+            let maxChecksPerColumn = questionNum === 4 ? 1 : 2;
             let isValid = true;
-            let errorMsg = '';
 
+            // Проверяем каждый столбец
             for (let colIdx = 0; colIdx < NAMES.length; colIdx++) {
                 const checkboxes = document.querySelectorAll(`.q${questionNum}-col-${colIdx}`);
                 const checkedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
 
-                if (checkedCount !== maxChecks) {
+                if (checkedCount !== maxChecksPerColumn) {
                     isValid = false;
                 }
             }
@@ -387,7 +466,7 @@
             const counterEl = document.getElementById(`q${questionNum}Counter`);
             
             if (!isValid) {
-                errorEl.textContent = `❌ Каждому столбцу должно быть ровно ${maxChecks} отметок`;
+                errorEl.textContent = `❌ Каждому столбцу должно быть ровно ${maxChecksPerColumn} отметок`;
                 errorEl.classList.add('show');
             } else {
                 errorEl.classList.remove('show');
@@ -399,11 +478,12 @@
             for (let colIdx = 0; colIdx < NAMES.length; colIdx++) {
                 const checkboxes = document.querySelectorAll(`.q${questionNum}-col-${colIdx}`);
                 const checkedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
-                counts[NAMES[colIdx]] = checkedCount;
+                const status = checkedCount === maxChecksPerColumn ? '✅' : '❌';
+                counts[NAMES[colIdx]] = `${status} ${checkedCount}/${maxChecksPerColumn}`;
             }
             
             const countStr = Object.entries(counts)
-                .map(([name, count]) => `${name}: ${count}/${maxChecks}`)
+                .map(([name, count]) => `${name}: ${count}`)
                 .join(' | ');
             counterEl.textContent = countStr;
 
@@ -423,47 +503,100 @@
             const isValid2 = validateTable(2);
             const isValid3 = validateTable(3);
             const isValid4 = validateTable(4);
+            const q1 = document.querySelector('input[name="question1"]:checked');
+
+            if (!q1) {
+                alert('⚠️ Пожалуйста, выберите, кто вы!');
+                return;
+            }
 
             if (!isValid2 || !isValid3 || !isValid4) {
                 alert('⚠️ Пожалуйста, исправьте ошибки в таблицах!');
                 return;
             }
 
+            // Отключаем кнопку
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Отправка...';
+
             // Собираем данные
             const formData = new FormData();
-            const q1 = document.querySelector('input[name="question1"]:checked').value;
-            formData.append('entry.1654513123', q1);
+            
+            // Добавляем первый вопрос
+            formData.append(`entry.${ENTRY_IDS.q1}`, q1.value);
 
-            // Собираем данные таблиц
-            for (let q = 2; q <= 4; q++) {
-                const maxRows = q === 4 ? 10 : 20;
-                for (let row = 0; row < maxRows; row++) {
-                    for (let col = 0; col < NAMES.length; col++) {
-                        const checkbox = document.querySelector(
-                            `input[name="q${q}_${col}"]:nth-of-type(${row + 1})`
-                        );
-                        // Здесь нужно правильно собрать данные
-                    }
+            // Добавляем данные для вопроса 2 (20 треков)
+            for (let trackNum = 1; trackNum <= 20; trackNum++) {
+                let q2Answers = [];
+                
+                document.querySelectorAll(`.q2-row-${trackNum}:checked`).forEach(cb => {
+                    q2Answers.push(cb.value);
+                });
+                
+                if (q2Answers.length > 0) {
+                    const entryId = ENTRY_IDS.q2[trackNum - 1];
+                    formData.append(`entry.${entryId}`, q2Answers[0]); // Берем первый (и единственный) выбранный элемент
+                }
+            }
+
+            // Добавляем данные для вопроса 3 (20 треков)
+            for (let trackNum = 1; trackNum <= 20; trackNum++) {
+                let q3Answers = [];
+                
+                document.querySelectorAll(`.q3-row-${trackNum}:checked`).forEach(cb => {
+                    q3Answers.push(cb.value);
+                });
+                
+                if (q3Answers.length > 0) {
+                    const entryId = ENTRY_IDS.q3[trackNum - 1];
+                    formData.append(`entry.${entryId}`, q3Answers[0]); // Берем первый (и единственный) выбранный элемент
+                }
+            }
+
+            // Добавляем данные для вопроса 4 (10 треков)
+            for (let trackNum = 1; trackNum <= 10; trackNum++) {
+                let q4Answers = [];
+                
+                document.querySelectorAll(`.q4-row-${trackNum}:checked`).forEach(cb => {
+                    q4Answers.push(cb.value);
+                });
+                
+                if (q4Answers.length > 0) {
+                    const entryId = ENTRY_IDS.q4[trackNum - 1];
+                    formData.append(`entry.${entryId}`, q4Answers[0]); // Берем первый (и единственный) выбранный элемент
                 }
             }
 
             // Отправляем в Google Forms
             try {
-                await fetch('https://docs.google.com/forms/u/0/d/e/1FAIpQLSesxqw4dPHwHy1HwrymLnrjZB9RSnZf6yGYxuHdnuoBAuKq3g/formResponse', {
-                    method: 'POST',
-                    body: formData,
-                    mode: 'no-cors'
-                });
+                await fetch(
+                    `https://docs.google.com/forms/u/0/d/e/${FORM_ID}/formResponse`,
+                    {
+                        method: 'POST',
+                        body: formData,
+                        mode: 'no-cors'
+                    }
+                );
 
-                document.getElementById('successMessage').classList.add('show');
-                document.getElementById('musicForm').reset();
+                // После отправки показываем успех
                 setTimeout(() => {
-                    document.getElementById('successMessage').classList.remove('show');
-                }, 3000);
+                    document.getElementById('successMessage').classList.add('show');
+                    document.getElementById('musicForm').reset();
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Отправить ответы';
+                    
+                    // Скрываем сообщение через 5 секунд
+                    setTimeout(() => {
+                        document.getElementById('successMessage').classList.remove('show');
+                    }, 5000);
+                }, 500);
 
             } catch (error) {
                 console.error('Ошибка:', error);
-                alert('Ошибка при отправке формы');
+                alert('❌ Ошибка при отправке формы. Проверьте консоль (F12)');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Отправить ответы';
             }
         });
     </script>
