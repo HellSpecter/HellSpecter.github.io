@@ -385,54 +385,9 @@
         const ENTRY_IDS = {
             q1: '1654513123',
             q2: ['900977987', '865330579', '1911619587', '1541916157', '971242591', '1433716698', '932251529', '1265296340', '1361763527', '1915403637', '415750917', '149424886', '2146673989', '679252067', '1875934641', '294970993', '1770499325', '1791198223', '1335292671', '421314620'],
-            q3: ['1266505640', '869736572', '666765757', '1148246175', '623442061', '659852939', '106523912', '182975063', '1347681721', '661395707', '1769264699', '1025031653', '1780183676', '390786432', '757093024', '1778898336', '1398781992', '882237723', '835570859', '342320418'],
+            q3: ['1266505640', '869736572', '666765757', '1148246175', '623442061', '106523912', '182975063', '1347681721', '661395707', '1769264699', '1025031653', '1780183676', '390786432', '757093024', '1778898336', '1398781992', '882237723', '835570859', '342320418'],
             q4: ['1945186855', '837280174', '961763830', '336956217', '1051071271', '476970349', '1190636999', '814519507', '1978605574', '915262374']
         };
-
-        // Функция для URL кодирования
-        function encodeValue(str) {
-            return encodeURIComponent(str);
-        }
-
-        // Функция для генерации ссылки
-        function generateFormLink() {
-            let url = `https://docs.google.com/forms/d/e/${FORM_ID}/viewform?usp=pp_url`;
-            
-            // Вопрос 1
-            const q1 = document.querySelector('input[name="question1"]:checked');
-            if (q1) {
-                url += `&entry.${ENTRY_IDS.q1}=${encodeValue(q1.value)}`;
-            }
-
-            // Вопрос 2
-            for (let trackNum = 1; trackNum <= 20; trackNum++) {
-                const checked = document.querySelector(`.q2-row-${trackNum}:checked`);
-                if (checked) {
-                    const entryId = ENTRY_IDS.q2[trackNum - 1];
-                    url += `&entry.${entryId}=${encodeValue(checked.value)}`;
-                }
-            }
-
-            // Вопрос 3
-            for (let trackNum = 1; trackNum <= 20; trackNum++) {
-                const checked = document.querySelector(`.q3-row-${trackNum}:checked`);
-                if (checked) {
-                    const entryId = ENTRY_IDS.q3[trackNum - 1];
-                    url += `&entry.${entryId}=${encodeValue(checked.value)}`;
-                }
-            }
-
-            // Вопрос 4
-            for (let trackNum = 1; trackNum <= 10; trackNum++) {
-                const checked = document.querySelector(`.q4-row-${trackNum}:checked`);
-                if (checked) {
-                    const entryId = ENTRY_IDS.q4[trackNum - 1];
-                    url += `&entry.${entryId}=${encodeValue(checked.value)}`;
-                }
-            }
-
-            return url;
-        }
 
         // Генерируем таблицы
         function generateTable(questionNum, rows) {
@@ -565,20 +520,64 @@
             submitBtn.disabled = true;
             submitBtn.textContent = 'Отправка...';
 
+            // Собираем данные
+            const formData = new FormData();
+            
+            // Добавляем первый вопрос
+            formData.append(`entry.${ENTRY_IDS.q1}`, q1.value);
+
+            // Добавляем данные для вопроса 2 (20 треков)
+            for (let trackNum = 1; trackNum <= 20; trackNum++) {
+                let q2Answers = [];
+                
+                document.querySelectorAll(`.q2-row-${trackNum}:checked`).forEach(cb => {
+                    q2Answers.push(cb.value);
+                });
+                
+                if (q2Answers.length > 0) {
+                    const entryId = ENTRY_IDS.q2[trackNum - 1];
+                    formData.append(`entry.${entryId}`, q2Answers[0]); // Берем первый (и единственный) выбранный элемент
+                }
+            }
+
+            // Добавляем данные для вопроса 3 (20 треков)
+            for (let trackNum = 1; trackNum <= 20; trackNum++) {
+                let q3Answers = [];
+                
+                document.querySelectorAll(`.q3-row-${trackNum}:checked`).forEach(cb => {
+                    q3Answers.push(cb.value);
+                });
+                
+                if (q3Answers.length > 0) {
+                    const entryId = ENTRY_IDS.q3[trackNum - 1];
+                    formData.append(`entry.${entryId}`, q3Answers[0]); // Берем первый (и единственный) выбранный элемент
+                }
+            }
+
+            // Добавляем данные для вопроса 4 (10 треков)
+            for (let trackNum = 1; trackNum <= 10; trackNum++) {
+                let q4Answers = [];
+                
+                document.querySelectorAll(`.q4-row-${trackNum}:checked`).forEach(cb => {
+                    q4Answers.push(cb.value);
+                });
+                
+                if (q4Answers.length > 0) {
+                    const entryId = ENTRY_IDS.q4[trackNum - 1];
+                    formData.append(`entry.${entryId}`, q4Answers[0]); // Берем первый (и единственный) выбранный элемент
+                }
+            }
+
+            // Отправляем в Google Forms
             try {
-                // Генерируем ссылку
-                const formLink = generateFormLink();
-                
-                // Выводим в консоль
-                console.log('=== ФОРМА ДЛЯ ОТПРАВКИ ===');
-                console.log(formLink);
-                console.log('===========================');
-                
-                // Показываем алерт с ссылкой (для тестирования)
-                alert('✅ Ссылка сгенерирована!\n\nПроверьте консоль (F12) для полной ссылки.\n\nНажмите OK чтобы открыть форму в новой вкладке.');
-                
-                // Открываем ссылку в новой вкладке
-                window.open(formLink, '_blank');
+                await fetch(
+                    `https://docs.google.com/forms/u/0/d/e/${FORM_ID}/formResponse`,
+                    {
+                        method: 'POST',
+                        body: formData,
+                        mode: 'no-cors'
+                    }
+                );
 
                 // После отправки показываем успех
                 setTimeout(() => {
@@ -595,7 +594,7 @@
 
             } catch (error) {
                 console.error('Ошибка:', error);
-                alert('❌ Ошибка при отправке формы');
+                alert('❌ Ошибка при отправке формы. Проверьте консоль (F12)');
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Отправить ответы';
             }
@@ -603,4 +602,5 @@
     </script>
 </body>
 </html>
+
 
