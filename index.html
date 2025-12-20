@@ -130,7 +130,18 @@
             accent-color: #27ae60;
         }
 
+        /* Замените существующий стиль для подсветки ячейки */
         td:has(> input[type="checkbox"]:checked) {
+            background-color: #d5f4e6;
+            font-weight: 600;
+        }
+        
+        /* На этот новый стиль для подсветки всей строки */
+        tr:has(> td > input[type="checkbox"]:checked) {
+            background-color: #d5f4e6;
+        }
+        
+        tr:has(> td > input[type="checkbox"]:checked) td {
             background-color: #d5f4e6;
             font-weight: 600;
         }
@@ -461,17 +472,41 @@
                     checkbox.dataset.col = idx;
                     checkbox.dataset.question = questionNum;
                     
-                    checkbox.addEventListener('change', (e) => {
-                        // Ограничение: только 1 отметка в строке
-                        if (e.target.checked) {
-                            document.querySelectorAll(`.q${questionNum}-row-${i}`).forEach(cb => {
-                                if (cb !== e.target && cb.checked) {
-                                    cb.checked = false;
-                                }
-                            });
-                        }
-                        validateTable(questionNum);
-                    });
+                checkbox.addEventListener('change', (e) => {
+                    // Ограничение: только 1 отметка в строке
+                    if (e.target.checked) {
+                        document.querySelectorAll(`.q${questionNum}-row-${i}`).forEach(cb => {
+                            if (cb !== e.target && cb.checked) {
+                                cb.checked = false;
+                                // Убираем подсветку с других строк
+                                const otherRow = cb.closest('tr');
+                                otherRow.style.backgroundColor = '';
+                                otherRow.querySelectorAll('td').forEach(td => {
+                                    td.style.backgroundColor = '';
+                                    td.style.fontWeight = '';
+                                });
+                            }
+                        });
+                        
+                        // Подсвечиваем текущую строку
+                        const currentRow = e.target.closest('tr');
+                        currentRow.style.backgroundColor = '#d5f4e6';
+                        currentRow.querySelectorAll('td').forEach(td => {
+                            td.style.backgroundColor = '#d5f4e6';
+                            td.style.fontWeight = '600';
+                        });
+                    } else {
+                        // Убираем подсветку при снятии отметки
+                        const currentRow = e.target.closest('tr');
+                        currentRow.style.backgroundColor = '';
+                        currentRow.querySelectorAll('td').forEach(td => {
+                            td.style.backgroundColor = '';
+                            td.style.fontWeight = '';
+                        });
+                    }
+                    
+                    validateTable(questionNum);
+                });
                     
                     td.appendChild(checkbox);
                     tr.appendChild(td);
@@ -500,12 +535,34 @@
             const errorEl = document.getElementById(`q${questionNum}Error`);
             const counterEl = document.getElementById(`q${questionNum}Counter`);
             
+            // В функции validateTable, после проверки всех условий, добавьте:
             if (!isValid) {
                 errorEl.textContent = `❌ Каждому столбцу должно быть ровно ${maxChecksPerColumn} отметок`;
                 errorEl.classList.add('show');
+                
+                // Сбрасываем подсветку при ошибке
+                document.querySelectorAll(`tbody#question${questionNum}Body tr`).forEach(tr => {
+                    tr.style.backgroundColor = '';
+                    tr.querySelectorAll('td').forEach(td => {
+                        td.style.backgroundColor = '';
+                        td.style.fontWeight = '';
+                    });
+                });
             } else {
                 errorEl.classList.remove('show');
                 errorEl.textContent = '';
+                
+                // Восстанавливаем подсветку при успешной валидации
+                document.querySelectorAll(`tbody#question${questionNum}Body tr`).forEach(tr => {
+                    const hasChecked = tr.querySelector('input[type="checkbox"]:checked');
+                    if (hasChecked) {
+                        tr.style.backgroundColor = '#d5f4e6';
+                        tr.querySelectorAll('td').forEach(td => {
+                            td.style.backgroundColor = '#d5f4e6';
+                            td.style.fontWeight = '600';
+                        });
+                    }
+                });
             }
 
             // Показываем счетчик
@@ -637,6 +694,7 @@
     </script>
 </body>
 </html>
+
 
 
 
