@@ -83,6 +83,9 @@
         .table-wrapper {
             overflow-x: auto;
             margin-bottom: 20px;
+            max-height: 600px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
 
         table {
@@ -96,6 +99,14 @@
             color: white;
             position: sticky;
             top: 0;
+            z-index: 10;
+        }
+
+        tfoot {
+            background-color: #667eea;
+            color: white;
+            position: sticky;
+            bottom: 0;
             z-index: 10;
         }
 
@@ -113,27 +124,18 @@
             transition: background-color 0.2s ease;
         }
 
-
-
-        /* Добавьте этот стиль после существующих стилей для thead */
-        tfoot {
-            background-color: #667eea;
-            color: white;
-            position: sticky;
-            bottom: 0;
-            z-index: 10;
-        }
-        
-        tfoot th {
-            padding: 12px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 13px;
-        }
-
-        
         tr:hover {
             background-color: #f8f9ff;
+        }
+
+        /* Подсветка всей строки при выборе */
+        tr:has(> td > input[type="checkbox"]:checked) {
+            background-color: #d5f4e6;
+        }
+
+        tr:has(> td > input[type="checkbox"]:checked) td {
+            background-color: #d5f4e6;
+            font-weight: 600;
         }
 
         /* Checkbox стили */
@@ -149,22 +151,6 @@
             accent-color: #27ae60;
         }
 
-        /* Замените существующий стиль для подсветки ячейки */
-        td:has(> input[type="checkbox"]:checked) {
-            background-color: #d5f4e6;
-            font-weight: 600;
-        }
-        
-        /* На этот новый стиль для подсветки всей строки */
-        tr:has(> td > input[type="checkbox"]:checked) {
-            background-color: #d5f4e6;
-        }
-        
-        tr:has(> td > input[type="checkbox"]:checked) td {
-            background-color: #d5f4e6;
-            font-weight: 600;
-        }
-
         .row-label {
             font-weight: 600;
             color: #333;
@@ -178,6 +164,7 @@
             justify-content: center;
             gap: 10px;
             min-width: 150px;
+            position: relative;
         }
 
         .row-image img {
@@ -186,6 +173,22 @@
             object-fit: cover;
             border-radius: 4px;
             border: 1px solid #ddd;
+        }
+
+        .icon-number {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #667eea;
+            color: white;
+            font-size: 10px;
+            padding: 2px 5px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .row-image:hover .icon-number {
+            display: block;
         }
 
         /* Ошибка */
@@ -266,6 +269,27 @@
             font-size: 12px;
             font-style: italic;
         }
+
+        .table-scroll-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .scroll-btn {
+            background-color: #667eea;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .scroll-btn:hover {
+            background-color: #5a6fd8;
+        }
     </style>
 </head>
 <body>
@@ -340,34 +364,31 @@
                 <div class="info">
                     2️⃣ <strong>Категория 2:</strong> Что-то из Вашего плейлиста, что Вы периодически слушаете.
                 </div>
-
-
-
-<!-- Для каждой таблицы (вопросы 2, 3, 4) обновите структуру: -->
-<div class="table-wrapper">
-    <table>
-        <thead>
-            <tr>
-                <th>№</th>
-                <th>Никита А.</th>
-                <th>Тимур</th>
-                <th>Юра</th>
-                <th>Андрей</th>
-                <th>Вася</th>
-                <th>Артём</th>
-                <th>Коля</th>
-                <th>Дима</th>
-                <th>Альп</th>
-                <th>Никита Г.</th>
-            </tr>
-        </thead>
-        <tbody id="question2Body">
-        </tbody>
-        <!-- tfoot будет добавлен автоматически через JavaScript -->
-    </table>
-</div>
-                
-                
+                <div class="table-wrapper" id="table2">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>Никита А.</th>
+                                <th>Тимур</th>
+                                <th>Юра</th>
+                                <th>Андрей</th>
+                                <th>Вася</th>
+                                <th>Артём</th>
+                                <th>Коля</th>
+                                <th>Дима</th>
+                                <th>Альп</th>
+                                <th>Никита Г.</th>
+                            </tr>
+                        </thead>
+                        <tbody id="question2Body">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-scroll-buttons">
+                    <button type="button" class="scroll-btn" onclick="scrollToTop('table2')">↑ Наверх таблицы</button>
+                    <button type="button" class="scroll-btn" onclick="scrollToBottom('table2')">↓ Вниз таблицы</button>
+                </div>
                 <div class="error-message" id="q2Error"></div>
                 <div id="q2Counter" class="counter"></div>
             </div>
@@ -384,29 +405,31 @@
                 <div class="info">
                     4️⃣ <strong>Категория 4:</strong> Что-то из Вашего плейлиста. Возможно, вы давно это не слушали, но считаете, что это хороший трек и иногда к нему возвращаетесь. 
                 </div>
-<!-- Для каждой таблицы (вопросы 2, 3, 4) обновите структуру: -->
-<div class="table-wrapper">
-    <table>
-        <thead>
-            <tr>
-                <th>№</th>
-                <th>Никита А.</th>
-                <th>Тимур</th>
-                <th>Юра</th>
-                <th>Андрей</th>
-                <th>Вася</th>
-                <th>Артём</th>
-                <th>Коля</th>
-                <th>Дима</th>
-                <th>Альп</th>
-                <th>Никита Г.</th>
-            </tr>
-        </thead>
-        <tbody id="question2Body">
-        </tbody>
-        <!-- tfoot будет добавлен автоматически через JavaScript -->
-    </table>
-</div>
+                <div class="table-wrapper" id="table3">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>Никита А.</th>
+                                <th>Тимур</th>
+                                <th>Юра</th>
+                                <th>Андрей</th>
+                                <th>Вася</th>
+                                <th>Артём</th>
+                                <th>Коля</th>
+                                <th>Дима</th>
+                                <th>Альп</th>
+                                <th>Никита Г.</th>
+                            </tr>
+                        </thead>
+                        <tbody id="question3Body">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-scroll-buttons">
+                    <button type="button" class="scroll-btn" onclick="scrollToTop('table3')">↑ Наверх таблицы</button>
+                    <button type="button" class="scroll-btn" onclick="scrollToBottom('table3')">↓ Вниз таблицы</button>
+                </div>
                 <div class="error-message" id="q3Error"></div>
                 <div id="q3Counter" class="counter"></div>
             </div>
@@ -419,29 +442,32 @@
                 </div>
                 <div class="info">
                     5️⃣ <strong>Категория 5:</strong> Абсолютно любой трек, который Вас завайбил. Не обязательно из вашего плейлиста. Просто если нравится - кидайте.
-<!-- Для каждой таблицы (вопросы 2, 3, 4) обновите структуру: -->
-<div class="table-wrapper">
-    <table>
-        <thead>
-            <tr>
-                <th>№</th>
-                <th>Никита А.</th>
-                <th>Тимур</th>
-                <th>Юра</th>
-                <th>Андрей</th>
-                <th>Вася</th>
-                <th>Артём</th>
-                <th>Коля</th>
-                <th>Дима</th>
-                <th>Альп</th>
-                <th>Никита Г.</th>
-            </tr>
-        </thead>
-        <tbody id="question2Body">
-        </tbody>
-        <!-- tfoot будет добавлен автоматически через JavaScript -->
-    </table>
-</div>
+                </div>
+                <div class="table-wrapper" id="table4">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>Никита А.</th>
+                                <th>Тимур</th>
+                                <th>Юра</th>
+                                <th>Андрей</th>
+                                <th>Вася</th>
+                                <th>Артём</th>
+                                <th>Коля</th>
+                                <th>Дима</th>
+                                <th>Альп</th>
+                                <th>Никита Г.</th>
+                            </tr>
+                        </thead>
+                        <tbody id="question4Body">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-scroll-buttons">
+                    <button type="button" class="scroll-btn" onclick="scrollToTop('table4')">↑ Наверх таблицы</button>
+                    <button type="button" class="scroll-btn" onclick="scrollToBottom('table4')">↓ Вниз таблицы</button>
+                </div>
                 <div class="error-message" id="q4Error"></div>
                 <div id="q4Counter" class="counter"></div>
             </div>
@@ -464,129 +490,133 @@
             q4: ['1945186855', '837280174', '961763830', '336956217', '1051071271', '476970349', '1190636999', '814519507', '1978605574', '915262374']
         };
 
-function generateTable(questionNum, rows) {
-    const tbody = document.getElementById(`question${questionNum}Body`);
-    const table = tbody.closest('table');
-    
-    // Создаем нижний заголовок (tfoot)
-    const tfoot = document.createElement('tfoot');
-    const footerRow = document.createElement('tr');
-    
-    // Первая ячейка с номером
-    const firstFooterCell = document.createElement('th');
-    firstFooterCell.textContent = '№';
-    footerRow.appendChild(firstFooterCell);
-    
-    // Ячейки с именами
-    NAMES.forEach(name => {
-        const th = document.createElement('th');
-        th.textContent = name;
-        footerRow.appendChild(th);
-    });
-    
-    tfoot.appendChild(footerRow);
-    table.appendChild(tfoot);
-    
-    // Определяем начальный номер для иконок в зависимости от вопроса
-    let startIconNum;
-    if (questionNum === 2) {
-        startIconNum = 1; // Иконки 1-20
-    } else if (questionNum === 3) {
-        startIconNum = 21; // Иконки 21-40
-    } else if (questionNum === 4) {
-        startIconNum = 41; // Иконки 41-50
-    }
-    
-    // Остальной код создания строк
-    for (let i = 1; i <= rows; i++) {
-        const tr = document.createElement('tr');
-        tr.dataset.rowNum = i;
-        tr.dataset.question = questionNum;
-        
-        // Ячейка с номером и картинкой
-        const rowCell = document.createElement('td');
-        rowCell.className = 'row-image';
-        
-        const numSpan = document.createElement('span');
-        numSpan.textContent = i;
-        rowCell.appendChild(numSpan);
-        
-        const img = document.createElement('img');
-        // Используем правильный номер иконки
-        // В функции generateTable, после создания img, добавьте:
-const iconNumberSpan = document.createElement('span');
-iconNumberSpan.className = 'icon-number';
-iconNumberSpan.textContent = iconNum;
-rowCell.appendChild(iconNumberSpan);
-        const iconNum = startIconNum + (i - 1);
-        img.src = `images/${iconNum}.jpg`;
-        img.alt = `Трек ${i}`;
-        img.onerror = function() {
-            this.style.display = 'none';
-            // Добавляем текст с номером, если картинка не загрузилась
-            const errorSpan = document.createElement('span');
-            errorSpan.className = 'image-error';
-            errorSpan.textContent = ` (иконка ${iconNum})`;
-            rowCell.appendChild(errorSpan);
-        };
-        rowCell.appendChild(img);
-        tr.appendChild(rowCell);
-        
-        // Ячейки с checkboxes
-        NAMES.forEach((name, idx) => {
-            const td = document.createElement('td');
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.name = `q${questionNum}_row${i}_col${idx}`;
-            checkbox.value = name;
-            checkbox.className = `q${questionNum}-col-${idx} q${questionNum}-row-${i}`;
-            checkbox.dataset.row = i;
-            checkbox.dataset.col = idx;
-            checkbox.dataset.question = questionNum;
+        // Генерируем таблицы
+        function generateTable(questionNum, rows) {
+            const tbody = document.getElementById(`question${questionNum}Body`);
+            const table = tbody.closest('table');
             
-            checkbox.addEventListener('change', (e) => {
-                // Ограничение: только 1 отметка в строке
-                if (e.target.checked) {
-                    document.querySelectorAll(`.q${questionNum}-row-${i}`).forEach(cb => {
-                        if (cb !== e.target && cb.checked) {
-                            cb.checked = false;
-                            // Убираем подсветку с других строк
-                            const otherRow = cb.closest('tr');
-                            otherRow.style.backgroundColor = '';
-                            otherRow.querySelectorAll('td').forEach(td => {
+            // Создаем нижний заголовок (tfoot)
+            const tfoot = document.createElement('tfoot');
+            const footerRow = document.createElement('tr');
+            
+            // Первая ячейка с номером
+            const firstFooterCell = document.createElement('th');
+            firstFooterCell.textContent = '№';
+            footerRow.appendChild(firstFooterCell);
+            
+            // Ячейки с именами
+            NAMES.forEach(name => {
+                const th = document.createElement('th');
+                th.textContent = name;
+                footerRow.appendChild(th);
+            });
+            
+            tfoot.appendChild(footerRow);
+            table.appendChild(tfoot);
+            
+            // Определяем начальный номер для иконок в зависимости от вопроса
+            let startIconNum;
+            if (questionNum === 2) {
+                startIconNum = 1; // Иконки 1-20
+            } else if (questionNum === 3) {
+                startIconNum = 21; // Иконки 21-40
+            } else if (questionNum === 4) {
+                startIconNum = 41; // Иконки 41-50
+            }
+            
+            // Остальной код создания строк
+            for (let i = 1; i <= rows; i++) {
+                const tr = document.createElement('tr');
+                tr.dataset.rowNum = i;
+                tr.dataset.question = questionNum;
+                
+                // Ячейка с номером и картинкой
+                const rowCell = document.createElement('td');
+                rowCell.className = 'row-image';
+                
+                const numSpan = document.createElement('span');
+                numSpan.textContent = i;
+                rowCell.appendChild(numSpan);
+                
+                const img = document.createElement('img');
+                // Используем правильный номер иконки
+                const iconNum = startIconNum + (i - 1);
+                img.src = `images/${iconNum}.jpg`;
+                img.alt = `Трек ${i}`;
+                img.onerror = function() {
+                    this.style.display = 'none';
+                    // Добавляем текст с номером, если картинка не загрузилась
+                    const errorSpan = document.createElement('span');
+                    errorSpan.className = 'image-error';
+                    errorSpan.textContent = ` (иконка ${iconNum})`;
+                    rowCell.appendChild(errorSpan);
+                };
+                rowCell.appendChild(img);
+                
+                // Добавляем номер иконки при наведении
+                const iconNumberSpan = document.createElement('span');
+                iconNumberSpan.className = 'icon-number';
+                iconNumberSpan.textContent = iconNum;
+                rowCell.appendChild(iconNumberSpan);
+                
+                tr.appendChild(rowCell);
+                
+                // Ячейки с checkboxes
+                NAMES.forEach((name, idx) => {
+                    const td = document.createElement('td');
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.name = `q${questionNum}_row${i}_col${idx}`;
+                    checkbox.value = name;
+                    checkbox.className = `q${questionNum}-col-${idx} q${questionNum}-row-${i}`;
+                    checkbox.dataset.row = i;
+                    checkbox.dataset.col = idx;
+                    checkbox.dataset.question = questionNum;
+                    
+                    checkbox.addEventListener('change', (e) => {
+                        // Ограничение: только 1 отметка в строке
+                        if (e.target.checked) {
+                            document.querySelectorAll(`.q${questionNum}-row-${i}`).forEach(cb => {
+                                if (cb !== e.target && cb.checked) {
+                                    cb.checked = false;
+                                    // Убираем подсветку с других строк
+                                    const otherRow = cb.closest('tr');
+                                    otherRow.style.backgroundColor = '';
+                                    otherRow.querySelectorAll('td').forEach(td => {
+                                        td.style.backgroundColor = '';
+                                        td.style.fontWeight = '';
+                                    });
+                                }
+                            });
+                            
+                            // Подсвечиваем текущую строку
+                            const currentRow = e.target.closest('tr');
+                            currentRow.style.backgroundColor = '#d5f4e6';
+                            currentRow.querySelectorAll('td').forEach(td => {
+                                td.style.backgroundColor = '#d5f4e6';
+                                td.style.fontWeight = '600';
+                            });
+                        } else {
+                            // Убираем подсветку при снятии отметки
+                            const currentRow = e.target.closest('tr');
+                            currentRow.style.backgroundColor = '';
+                            currentRow.querySelectorAll('td').forEach(td => {
                                 td.style.backgroundColor = '';
                                 td.style.fontWeight = '';
                             });
                         }
+                        
+                        validateTable(questionNum);
                     });
                     
-                    // Подсвечиваем текущую строку
-                    const currentRow = e.target.closest('tr');
-                    currentRow.style.backgroundColor = '#d5f4e6';
-                    currentRow.querySelectorAll('td').forEach(td => {
-                        td.style.backgroundColor = '#d5f4e6';
-                        td.style.fontWeight = '600';
-                    });
-                } else {
-                    // Убираем подсветку при снятии отметки
-                    const currentRow = e.target.closest('tr');
-                    currentRow.style.backgroundColor = '';
-                    currentRow.querySelectorAll('td').forEach(td => {
-                        td.style.backgroundColor = '';
-                        td.style.fontWeight = '';
-                    });
-                }
+                    td.appendChild(checkbox);
+                    tr.appendChild(td);
+                });
                 
-                validateTable(questionNum);
-            });
-            
-            td.appendChild(checkbox);
-            tr.appendChild(td);
-        });
-        
-        tbody.appendChild(tr);
-    }
-}
+                tbody.appendChild(tr);
+            }
+        }
+
         // Валидация таблиц
         function validateTable(questionNum) {
             let maxChecksPerColumn = questionNum === 4 ? 1 : 2;
@@ -606,7 +636,6 @@ rowCell.appendChild(iconNumberSpan);
             const errorEl = document.getElementById(`q${questionNum}Error`);
             const counterEl = document.getElementById(`q${questionNum}Counter`);
             
-            // В функции validateTable, после проверки всех условий, добавьте:
             if (!isValid) {
                 errorEl.textContent = `❌ Каждому столбцу должно быть ровно ${maxChecksPerColumn} отметок`;
                 errorEl.classList.add('show');
@@ -653,11 +682,21 @@ rowCell.appendChild(iconNumberSpan);
             return isValid;
         }
 
+        // Функции для прокрутки таблиц
+        function scrollToTop(tableId) {
+            const table = document.getElementById(tableId);
+            table.scrollTop = 0;
+        }
+
+        function scrollToBottom(tableId) {
+            const table = document.getElementById(tableId);
+            table.scrollTop = table.scrollHeight;
+        }
+
         // Инициализация
-// Инициализация
-generateTable(2, 20); // Иконки 1-20
-generateTable(3, 20); // Иконки 21-40
-generateTable(4, 10); // Иконки 41-50
+        generateTable(2, 20); // Иконки 1-20
+        generateTable(3, 20); // Иконки 21-40
+        generateTable(4, 10); // Иконки 41-50
 
         // Отправка формы
         document.getElementById('musicForm').addEventListener('submit', async (e) => {
@@ -750,6 +789,17 @@ generateTable(4, 10); // Иконки 41-50
                     submitBtn.disabled = false;
                     submitBtn.textContent = 'Отправить ответы';
                     
+                    // Сбрасываем подсветку строк
+                    [2, 3, 4].forEach(qNum => {
+                        document.querySelectorAll(`tbody#question${qNum}Body tr`).forEach(tr => {
+                            tr.style.backgroundColor = '';
+                            tr.querySelectorAll('td').forEach(td => {
+                                td.style.backgroundColor = '';
+                                td.style.fontWeight = '';
+                            });
+                        });
+                    });
+                    
                     // Скрываем сообщение через 5 секунд
                     setTimeout(() => {
                         document.getElementById('successMessage').classList.remove('show');
@@ -766,9 +816,3 @@ generateTable(4, 10); // Иконки 41-50
     </script>
 </body>
 </html>
-
-
-
-
-
-
