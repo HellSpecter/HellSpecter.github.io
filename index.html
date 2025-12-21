@@ -83,9 +83,6 @@
         .table-wrapper {
             overflow-x: auto;
             margin-bottom: 20px;
-            max-height: 600px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
         }
 
         table {
@@ -164,7 +161,6 @@
             justify-content: center;
             gap: 10px;
             min-width: 150px;
-            position: relative;
         }
 
         .row-image img {
@@ -173,22 +169,6 @@
             object-fit: cover;
             border-radius: 4px;
             border: 1px solid #ddd;
-        }
-
-        .icon-number {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background-color: #667eea;
-            color: white;
-            font-size: 10px;
-            padding: 2px 5px;
-            border-radius: 10px;
-            display: none;
-        }
-
-        .row-image:hover .icon-number {
-            display: block;
         }
 
         /* Ошибка */
@@ -269,27 +249,6 @@
             font-size: 12px;
             font-style: italic;
         }
-
-        .table-scroll-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .scroll-btn {
-            background-color: #667eea;
-            color: white;
-            border: none;
-            padding: 5px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-
-        .scroll-btn:hover {
-            background-color: #5a6fd8;
-        }
     </style>
 </head>
 <body>
@@ -364,7 +323,7 @@
                 <div class="info">
                     2️⃣ <strong>Категория 2:</strong> Что-то из Вашего плейлиста, что Вы периодически слушаете.
                 </div>
-                <div class="table-wrapper" id="table2">
+                <div class="table-wrapper">
                     <table>
                         <thead>
                             <tr>
@@ -385,10 +344,6 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="table-scroll-buttons">
-                    <button type="button" class="scroll-btn" onclick="scrollToTop('table2')">↑ Наверх таблицы</button>
-                    <button type="button" class="scroll-btn" onclick="scrollToBottom('table2')">↓ Вниз таблицы</button>
-                </div>
                 <div class="error-message" id="q2Error"></div>
                 <div id="q2Counter" class="counter"></div>
             </div>
@@ -405,7 +360,7 @@
                 <div class="info">
                     4️⃣ <strong>Категория 4:</strong> Что-то из Вашего плейлиста. Возможно, вы давно это не слушали, но считаете, что это хороший трек и иногда к нему возвращаетесь. 
                 </div>
-                <div class="table-wrapper" id="table3">
+                <div class="table-wrapper">
                     <table>
                         <thead>
                             <tr>
@@ -426,10 +381,6 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="table-scroll-buttons">
-                    <button type="button" class="scroll-btn" onclick="scrollToTop('table3')">↑ Наверх таблицы</button>
-                    <button type="button" class="scroll-btn" onclick="scrollToBottom('table3')">↓ Вниз таблицы</button>
-                </div>
                 <div class="error-message" id="q3Error"></div>
                 <div id="q3Counter" class="counter"></div>
             </div>
@@ -443,7 +394,7 @@
                 <div class="info">
                     5️⃣ <strong>Категория 5:</strong> Абсолютно любой трек, который Вас завайбил. Не обязательно из вашего плейлиста. Просто если нравится - кидайте.
                 </div>
-                <div class="table-wrapper" id="table4">
+                <div class="table-wrapper">
                     <table>
                         <thead>
                             <tr>
@@ -463,10 +414,6 @@
                         <tbody id="question4Body">
                         </tbody>
                     </table>
-                </div>
-                <div class="table-scroll-buttons">
-                    <button type="button" class="scroll-btn" onclick="scrollToTop('table4')">↑ Наверх таблицы</button>
-                    <button type="button" class="scroll-btn" onclick="scrollToBottom('table4')">↓ Вниз таблицы</button>
                 </div>
                 <div class="error-message" id="q4Error"></div>
                 <div id="q4Counter" class="counter"></div>
@@ -545,19 +492,8 @@
                 img.alt = `Трек ${i}`;
                 img.onerror = function() {
                     this.style.display = 'none';
-                    // Добавляем текст с номером, если картинка не загрузилась
-                    const errorSpan = document.createElement('span');
-                    errorSpan.className = 'image-error';
-                    errorSpan.textContent = ` (иконка ${iconNum})`;
-                    rowCell.appendChild(errorSpan);
                 };
                 rowCell.appendChild(img);
-                
-                // Добавляем номер иконки при наведении
-                const iconNumberSpan = document.createElement('span');
-                iconNumberSpan.className = 'icon-number';
-                iconNumberSpan.textContent = iconNum;
-                rowCell.appendChild(iconNumberSpan);
                 
                 tr.appendChild(rowCell);
                 
@@ -680,17 +616,6 @@
             counterEl.textContent = countStr;
 
             return isValid;
-        }
-
-        // Функции для прокрутки таблиц
-        function scrollToTop(tableId) {
-            const table = document.getElementById(tableId);
-            table.scrollTop = 0;
-        }
-
-        function scrollToBottom(tableId) {
-            const table = document.getElementById(tableId);
-            table.scrollTop = table.scrollHeight;
         }
 
         // Инициализация
