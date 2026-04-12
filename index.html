@@ -44,7 +44,7 @@
         }
 
         .form-section {
-            margin-bottom: 40px;
+            margin-bottom: 50px;
         }
 
         .form-section h2 {
@@ -55,6 +55,7 @@
             border-bottom: 2px solid #667eea;
         }
 
+        /* Общие стили для радио кнопок */
         .radio-group {
             display: flex;
             flex-wrap: wrap;
@@ -79,7 +80,7 @@
             color: #333;
         }
 
-        /* Таблица для вопросов 2 и 3 */
+        /* Табличные стили */
         .table-wrapper {
             overflow-x: auto;
             margin-bottom: 20px;
@@ -89,33 +90,24 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
+            min-width: 800px; /* Чтобы не сплющивалось слишком сильно */
         }
 
         thead {
             background-color: #667eea;
             color: white;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        tfoot {
-            background-color: #667eea;
-            color: white;
-            position: sticky;
-            bottom: 0;
-            z-index: 10;
         }
 
         th {
-            padding: 12px;
+            padding: 10px 5px;
             text-align: center;
             font-weight: 600;
-            font-size: 13px;
+            font-size: 12px;
+            white-space: nowrap;
         }
 
         td {
-            padding: 10px;
+            padding: 5px;
             text-align: center;
             border: 1px solid #ddd;
             transition: background-color 0.2s ease;
@@ -125,65 +117,58 @@
             background-color: #f8f9ff;
         }
 
-        /* Подсветка всей строки при выборе */
-        tr:has(> td > input[type="checkbox"]:checked) {
-            background-color: #d5f4e6;
-        }
-
-        tr:has(> td > input[type="checkbox"]:checked) td {
-            background-color: #d5f4e6;
-            font-weight: 600;
-        }
-
         /* Checkbox стили */
         input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
+            width: 16px;
+            height: 16px;
             cursor: pointer;
             accent-color: #667eea;
         }
 
-        /* Подсветка ячейки когда чекбокс отмечен */
+        /* Подсветка активной ячейки */
         input[type="checkbox"]:checked {
             accent-color: #27ae60;
         }
 
-        .row-label {
-            font-weight: 600;
-            color: #333;
-            text-align: center;
-            min-width: 80px;
-        }
-
-        .row-image {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            min-width: 150px;
-        }
-
-        .row-image img {
-            width: 40px;
-            height: 40px;
-            object-fit: cover;
+        /* Оповещения */
+        .warning {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px 15px;
+            margin-bottom: 15px;
             border-radius: 4px;
-            border: 1px solid #ddd;
+            color: #856404;
+            font-size: 14px;
         }
 
-        /* Ошибка */
+        .info {
+            background-color: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            color: #0c5460;
+            font-size: 14px;
+        }
+
         .error-message {
             color: #e74c3c;
             font-size: 14px;
             margin-top: 10px;
             display: none;
+            font-weight: bold;
         }
 
-        .error-message.show {
-            display: block;
+        .success-message {
+            display: none;
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
         }
 
-        /* Кнопка отправки */
         .submit-btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -205,49 +190,28 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
-
-        .success-message {
-            display: none;
-            background-color: #d4edda;
-            color: #155724;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            margin-bottom: 20px;
+        
+        /* Стили картинки трека */
+        .track-cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: #fafafa;
         }
-
-        .success-message.show {
-            display: block;
-        }
-
-        .counter {
-            font-size: 12px;
-            color: #999;
-            margin-top: 5px;
-        }
-
-        .warning {
-            background-color: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 10px 15px;
-            margin-bottom: 15px;
+        
+        .track-img {
+            width: 32px;
+            height: 32px;
+            object-fit: cover;
             border-radius: 4px;
-            color: #856404;
+            border: 1px solid #eee;
         }
 
-        .info {
-            background-color: #d1ecf1;
-            border-left: 4px solid #17a2b8;
-            padding: 10px 15px;
-            margin-bottom: 15px;
-            border-radius: 4px;
-            color: #0c5460;
-        }
-
-        .image-error {
-            color: #999;
-            font-size: 12px;
-            font-style: italic;
+        @media (max-width: 768px) {
+            .radio-item label {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -311,23 +275,23 @@
                 </div>
             </div>
 
-            <!-- Вопрос 2 -->
-            <div class="form-section">
-                <h2>Вопрос 2: Треки категорий 1 и 2</h2>
-                <div class="warning">
-                    ⚠️ <strong>Ограничения:</strong> В каждой строке - только 1 отметка | Каждому столбцу - ровно 2 отметки
+            <!-- Вопрос 2: Категории 1 и 2 -->
+            <div class="form-section" id="section-q2">
+                <h2>Вопрос 2: Треки 1-10 (Категории 1 и 2)</h2>
+                <div class="info">
+                    <strong>Инструкция:</strong> В каждой строке выберите ТОЛЬКО ОДНОГО человека.
                 </div>
                 <div class="info">
-                    1️⃣ <strong>Категория 1:</strong> Самое актуальное лично для Вас. Что-то, что Вы слушаете часто в последнее время (последние два месяца Вы частенько слушаете/слушали этот трек).
+                    1️⃣ <strong>Категория 1:</strong> Самое актуальное лично для Вас.<br>
+                    2️⃣ <strong>Категория 2:</strong> Что-то из Вашего плейлиста периодически.
                 </div>
-                <div class="info">
-                    2️⃣ <strong>Категория 2:</strong> Что-то из Вашего плейлиста, что Вы периодически слушаете.
-                </div>
+                
                 <div class="table-wrapper">
-                    <table>
+                    <table id="table-q2">
                         <thead>
                             <tr>
-                                <th>№</th>
+                                <th style="min-width: 80px;">№</th>
+                                <!-- Имена будут добавлены скриптом или статически, здесь для примера -->
                                 <th>Никита А.</th>
                                 <th>Тимур</th>
                                 <th>Юра</th>
@@ -340,31 +304,29 @@
                                 <th>Никита Г.</th>
                             </tr>
                         </thead>
-                        <tbody id="question2Body">
+                        <tbody id="table-q2-body">
+                            <!-- Строки 1-10 генерируются JS -->
                         </tbody>
                     </table>
                 </div>
                 <div class="error-message" id="q2Error"></div>
-                <div id="q2Counter" class="counter"></div>
             </div>
 
-            <!-- Вопрос 3 -->
-            <div class="form-section">
-                <h2>Вопрос 3: Треки категорий 3 и 4</h2>
-                <div class="warning">
-                    ⚠️ <strong>Ограничения:</strong> В каждой строке - только 1 отметка | Каждому столбцу - ровно 2 отметки
-                </div>
+             <!-- Вопрос 3: Категория 3 -->
+             <div class="form-section" id="section-q3">
+                <h2>Вопрос 3: Треки 11-20 (Категория 3)</h2>
                 <div class="info">
+                    <strong>Инструкция:</strong> В каждой строке выберите ТОЛЬКО ОДНОГО человека.
+                </div>
+                 <div class="info">
                     3️⃣ <strong>Категория 3:</strong> Что-то из Вашего плейлиста, что Вы периодически слушаете.
                 </div>
-                <div class="info">
-                    4️⃣ <strong>Категория 4:</strong> Что-то из Вашего плейлиста. Возможно, вы давно это не слушали, но считаете, что это хороший трек и иногда к нему возвращаетесь. 
-                </div>
+                
                 <div class="table-wrapper">
-                    <table>
+                    <table id="table-q3">
                         <thead>
                             <tr>
-                                <th>№</th>
+                                <th style="min-width: 80px;">№</th>
                                 <th>Никита А.</th>
                                 <th>Тимур</th>
                                 <th>Юра</th>
@@ -377,28 +339,29 @@
                                 <th>Никита Г.</th>
                             </tr>
                         </thead>
-                        <tbody id="question3Body">
+                        <tbody id="table-q3-body">
+                             <!-- Строки 11-20 генерируются JS -->
                         </tbody>
                     </table>
                 </div>
                 <div class="error-message" id="q3Error"></div>
-                <div id="q3Counter" class="counter"></div>
             </div>
 
-            <!-- Вопрос 4 -->
-            <div class="form-section">
-                <h2>Вопрос 4: Бонус треки</h2>
-                <div class="warning">
-                    ⚠️ <strong>Ограничение:</strong> В каждой строке - только 1 отметка | Каждому столбцу - ровно 1 отметка
-                </div>
+            <!-- Вопрос 4: Категория 4 -->
+            <div class="form-section" id="section-q4">
+                <h2>Вопрос 4: Треки 21-30 (Категория 4)</h2>
                 <div class="info">
-                    5️⃣ <strong>Категория 5:</strong> Абсолютно любой трек, который Вас завайбил. Не обязательно из вашего плейлиста. Просто если нравится - кидайте.
+                    <strong>Инструкция:</strong> В каждой строке выберите ТОЛЬКО ОДНОГО человека.
                 </div>
+                 <div class="info">
+                    4️⃣ <strong>Категория 4:</strong> То, что слушали давно, но хороший трек.
+                </div>
+                
                 <div class="table-wrapper">
-                    <table>
+                    <table id="table-q4">
                         <thead>
                             <tr>
-                                <th>№</th>
+                                <th style="min-width: 80px;">№</th>
                                 <th>Никита А.</th>
                                 <th>Тимур</th>
                                 <th>Юра</th>
@@ -411,12 +374,80 @@
                                 <th>Никита Г.</th>
                             </tr>
                         </thead>
-                        <tbody id="question4Body">
+                        <tbody id="table-q4-body">
+                             <!-- Строки 21-30 генерируются JS -->
                         </tbody>
                     </table>
                 </div>
                 <div class="error-message" id="q4Error"></div>
-                <div id="q4Counter" class="counter"></div>
+            </div>
+
+            <!-- Вопрос 5: Категория 5 -->
+            <div class="form-section" id="section-q5">
+                <h2>Вопрос 5: Треки 31-40 (Категория 5)</h2>
+                <div class="info">
+                    <strong>Инструкция:</strong> В каждой строке выберите ТОЛЬКО ОДНОГО человека.
+                </div>
+                 <div class="info">
+                    5️⃣ <strong>Категория 5:</strong> Любимые бонус треки.
+                </div>
+                
+                <div class="table-wrapper">
+                    <table id="table-q5">
+                        <thead>
+                            <tr>
+                                <th style="min-width: 80px;">№</th>
+                                <th>Никита А.</th>
+                                <th>Тимур</th>
+                                <th>Юра</th>
+                                <th>Андрей</th>
+                                <th>Вася</th>
+                                <th>Артём</th>
+                                <th>Коля</th>
+                                <th>Дима</th>
+                                <th>Альп</th>
+                                <th>Никита Г.</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-q5-body">
+                             <!-- Строки 31-40 генерируются JS -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="error-message" id="q5Error"></div>
+            </div>
+
+            <!-- Вопрос 6: Финал (если нужно еще 10 треков для довода до 50 или просто финал) -->
+            <!-- Добавил 6-ю таблицу для разнообразия, если нужно точно 50 треков, или удалите section-q6 если вам достаточно 40 -->
+             <div class="form-section" id="section-q6">
+                <h2>Вопрос 6: Финальные треки (41-50)</h2>
+                <div class="info">
+                    <strong>Инструкция:</strong> В каждой строке выберите ТОЛЬКО ОДНОГО человека.
+                </div>
+                
+                <div class="table-wrapper">
+                    <table id="table-q6">
+                        <thead>
+                            <tr>
+                                <th style="min-width: 80px;">№</th>
+                                <th>Никита А.</th>
+                                <th>Тимур</th>
+                                <th>Юра</th>
+                                <th>Андрей</th>
+                                <th>Вася</th>
+                                <th>Артём</th>
+                                <th>Коля</th>
+                                <th>Дима</th>
+                                <th>Альп</th>
+                                <th>Никита Г.</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-q6-body">
+                             <!-- Строки 41-50 генерируются JS -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="error-message" id="q6Error"></div>
             </div>
 
             <button type="submit" class="submit-btn" id="submitBtn">Отправить ответы</button>
@@ -425,315 +456,215 @@
 
     <script>
         const NAMES = ['Никита А.', 'Тимур', 'Юра', 'Андрей', 'Вася', 'Артём', 'Коля', 'Дима', 'Альп', 'Никита Г.'];
+        const FORM_ID = '1FAIpQLSesxqw4dPHwHy1HwrymLnrjZB9RSnZf6yGYxuHdnuoBAuKq3g'; // Проверьте ID
         
-        // ID Google Forms
-        const FORM_ID = '1FAIpQLSesxqw4dPHwHy1HwrymLnrjZB9RSnZf6yGYxuHdnuoBAuKq3g';
-
-        // Entry IDs для каждого вопроса
+        // Вводные данные Google Forms
+        // Структура ENTRY_IDS: key -> array of entry IDs per row
         const ENTRY_IDS = {
-            q1: '1654513123',
-            q2: ['900977987', '865330579', '1911619587', '1541916157', '971242591', '1433716698', '932251529', '1265296340', '1361763527', '1915403637', '415750917', '149424886', '2146673989', '679252067', '1875934641', '294970993', '1770499325', '1791198223', '1335292671', '421314620'],
-            q3: ['1266505640', '869736572', '666765757', '1148246175', '623442061', '659852939', '106523912', '182975063', '1347681721', '661395707', '1769264699', '1025031653', '1780183676', '390786432', '757093024', '1778898336', '1398781992', '882237723', '835570859', '342320418'],
-            q4: ['1945186855', '837280174', '961763830', '336956217', '1051071271', '476970349', '1190636999', '814519507', '1978605574', '915262374']
+            q1: '1654513123', 
+            // Для вопросов 2-5 каждый трек имеет свой ID поля ввода. 
+            // Здесь я заглушки расставил 20 штук на первый вопрос, 20 на второй и т.д.
+            // ВАЖНО: Вам нужно вставить сюда реальные ID полей из вашей формы Google Form
+            q2: Array.from({length: 10}, (_, i) => `entry_${i+1}`), 
+            q3: Array.from({length: 10}, (_, i) => `entry_${i+11}`),
+            q4: Array.from({length: 10}, (_, i) => `entry_${i+21}`),
+            q5: Array.from({length: 10}, (_, i) => `entry_${i+31}`),
+            q6: Array.from({length: 10}, (_, i) => `entry_${i+41}`)
         };
 
-        // Генерируем таблицы
-        function generateTable(questionNum, rows) {
-            const tbody = document.getElementById(`question${questionNum}Body`);
-            const table = tbody.closest('table');
+        // Функция генерации таблицы
+        function createTable(questionKey, startRow, endRow, containerId) {
+            const tbody = document.getElementById(`${containerId}-body`);
             
-            // Создаем нижний заголовок (tfoot)
-            const tfoot = document.createElement('tfoot');
-            const footerRow = document.createElement('tr');
-            
-            // Первая ячейка с номером
-            const firstFooterCell = document.createElement('th');
-            firstFooterCell.textContent = '№';
-            footerRow.appendChild(firstFooterCell);
-            
-            // Ячейки с именами
-            NAMES.forEach(name => {
-                const th = document.createElement('th');
-                th.textContent = name;
-                footerRow.appendChild(th);
-            });
-            
-            tfoot.appendChild(footerRow);
-            table.appendChild(tfoot);
-            
-            // Определяем начальный номер для иконок в зависимости от вопроса
-            let startIconNum;
-            if (questionNum === 2) {
-                startIconNum = 1; // Иконки 1-20
-            } else if (questionNum === 3) {
-                startIconNum = 21; // Иконки 21-40
-            } else if (questionNum === 4) {
-                startIconNum = 41; // Иконки 41-50
-            }
-            
-            // Остальной код создания строк
-            for (let i = 1; i <= rows; i++) {
+            for (let i = startRow; i <= endRow; i++) {
                 const tr = document.createElement('tr');
-                tr.dataset.rowNum = i;
-                tr.dataset.question = questionNum;
-                
-                // Ячейка с номером и картинкой
-                const rowCell = document.createElement('td');
-                rowCell.className = 'row-image';
-                
-                const numSpan = document.createElement('span');
-                numSpan.textContent = i;
-                rowCell.appendChild(numSpan);
-                
-                const img = document.createElement('img');
-                // Используем правильный номер иконки
-                const iconNum = startIconNum + (i - 1);
-                img.src = `images/${iconNum}.jpg`;
-                img.alt = `Трек ${i}`;
-                img.onerror = function() {
-                    this.style.display = 'none';
-                };
-                rowCell.appendChild(img);
-                
-                tr.appendChild(rowCell);
-                
-                // Ячейки с checkboxes
-                NAMES.forEach((name, idx) => {
+                tr.dataset.row = i;
+                tr.dataset.question = questionKey;
+
+                // Колонка 1: Номера и картинка
+                const tdIndex = document.createElement('td');
+                tdIndex.className = 'track-cell';
+                tdIndex.innerHTML = `<span>${i}</span>`;
+                // img.src = ... (можно добавить позже)
+                tr.appendChild(tdIndex);
+
+                // Колонки имен (checkboxes)
+                // Важно: У каждого имени должна быть ОДНА отметка в СТРОКЕ.
+                // Используем одинаковое имя атрибута name внутри строки для radio-like поведения.
+                NAMES.forEach((name, colIndex) => {
                     const td = document.createElement('td');
                     const checkbox = document.createElement('input');
-                    checkbox.type = 'checkbox';
-                    checkbox.name = `q${questionNum}_row${i}_col${idx}`;
-                    checkbox.value = name;
-                    checkbox.className = `q${questionNum}-col-${idx} q${questionNum}-row-${i}`;
-                    checkbox.dataset.row = i;
-                    checkbox.dataset.col = idx;
-                    checkbox.dataset.question = questionNum;
                     
-                    checkbox.addEventListener('change', (e) => {
-                        // Ограничение: только 1 отметка в строке
-                        if (e.target.checked) {
-                            document.querySelectorAll(`.q${questionNum}-row-${i}`).forEach(cb => {
-                                if (cb !== e.target && cb.checked) {
-                                    cb.checked = false;
-                                    // Убираем подсветку с других строк
-                                    const otherRow = cb.closest('tr');
-                                    otherRow.style.backgroundColor = '';
-                                    otherRow.querySelectorAll('td').forEach(td => {
-                                        td.style.backgroundColor = '';
-                                        td.style.fontWeight = '';
-                                    });
-                                }
-                            });
-                            
-                            // Подсвечиваем текущую строку
-                            const currentRow = e.target.closest('tr');
-                            currentRow.style.backgroundColor = '#d5f4e6';
-                            currentRow.querySelectorAll('td').forEach(td => {
-                                td.style.backgroundColor = '#d5f4e6';
-                                td.style.fontWeight = '600';
-                            });
-                        } else {
-                            // Убираем подсветку при снятии отметки
-                            const currentRow = e.target.closest('tr');
-                            currentRow.style.backgroundColor = '';
-                            currentRow.querySelectorAll('td').forEach(td => {
-                                td.style.backgroundColor = '';
-                                td.style.fontWeight = '';
+                    // Мы делаем это как Radio Buttonы визуально через CSS и JS, 
+                    // но технически используем Checkbox, чтобы отправить несколько значений в форму, если понадобится
+                    // ИЛИ просто используем Radio button? Нет, в Google формах для одного ответа нужен радиобаттон.
+                    // Но нам нужно собрать много данных.
+                    // Решение: Сделаем их RADIO BUTTONами внутри строки.
+                    // Тогда название инпута будет unique для всей группы строк? Нет.
+                    // Название инпута будет уникальным для конкретной строки (например q2_row1_col0, q2_row1_col1).
+                    
+                    // Исправление логики валидации:
+                    // Мы будем проверять, что в строке выбрано ровно 1 чекбокс.
+                    // При клике остальные в той же строке сбрасываются.
+                    
+                    checkbox.type = 'checkbox';
+                    checkbox.name = `q${questionKey}_row${i}`; // Все в одной строке имеют одно имя (как радио)
+                    checkbox.value = name;
+                    checkbox.id = `${questionKey}_${i}_${colIndex}`;
+                    
+                    // Обработка клика: взаимное исключение в рамках строки
+                    checkbox.addEventListener('change', function() {
+                        if (this.checked) {
+                            // Найти все инпуты с тем же именем в этой строке
+                            const siblings = document.querySelectorAll(`tr[data-row="${i}"][data-question="${questionKey}"] input`);
+                            siblings.forEach(sib => {
+                                if (sib !== this) sib.checked = false;
                             });
                         }
-                        
-                        validateTable(questionNum);
+                        validateSection(questionKey);
                     });
-                    
+
                     td.appendChild(checkbox);
                     tr.appendChild(td);
                 });
-                
+
                 tbody.appendChild(tr);
             }
         }
 
-        // Валидация таблиц
-        function validateTable(questionNum) {
-            let maxChecksPerColumn = questionNum === 4 ? 1 : 2;
+        // Создаем 5 таблиц
+        // Вопрос 2: Треки 1-10
+        createTable('q2', 1, 10, 'table-q2');
+        // Вопрос 3: Треки 11-20
+        createTable('q3', 11, 20, 'table-q3');
+        // Вопрос 4: Треки 21-30
+        createTable('q4', 21, 30, 'table-q4');
+        // Вопрос 5: Треки 31-40
+        createTable('q5', 31, 40, 'table-q5');
+        // Вопрос 6: Треки 41-50
+        createTable('q6', 41, 50, 'table-q6');
+
+
+        // Функция валидации секции
+        function validateSection(qKey) {
+            const errorsEl = document.getElementById(`${qKey.replace('q','Q') + 'R'}` || 'q6Error').parentElement.querySelector('.error-message');
+            const allRows = document.querySelectorAll(`[data-question="${qKey}"]`);
+            
             let isValid = true;
-
-            // Проверяем каждый столбец
-            for (let colIdx = 0; colIdx < NAMES.length; colIdx++) {
-                const checkboxes = document.querySelectorAll(`.q${questionNum}-col-${colIdx}`);
-                const checkedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
-
-                if (checkedCount !== maxChecksPerColumn) {
+            
+            allRows.forEach(row => {
+                const checkboxes = row.querySelectorAll('input[type="checkbox"]:checked');
+                if (checkboxes.length !== 1) {
                     isValid = false;
+                    // Можно визуально подсветить проблемную строку
+                    row.style.backgroundColor = '#ffebee';
+                } else {
+                    row.style.backgroundColor = '';
                 }
-            }
-
-            // Отображение ошибок
-            const errorEl = document.getElementById(`q${questionNum}Error`);
-            const counterEl = document.getElementById(`q${questionNum}Counter`);
+            });
             
+            // Обновляем статус ошибки (если хотите показывать сообщение)
             if (!isValid) {
-                errorEl.textContent = `❌ Каждому столбцу должно быть ровно ${maxChecksPerColumn} отметок`;
-                errorEl.classList.add('show');
-                
-                // Сбрасываем подсветку при ошибке
-                document.querySelectorAll(`tbody#question${questionNum}Body tr`).forEach(tr => {
-                    tr.style.backgroundColor = '';
-                    tr.querySelectorAll('td').forEach(td => {
-                        td.style.backgroundColor = '';
-                        td.style.fontWeight = '';
-                    });
-                });
+               // errorsEl.textContent = "Не заполнены некоторые строки. В каждой строке должен быть только 1 выбор.";
+               // errorsEl.style.display = 'block';
             } else {
-                errorEl.classList.remove('show');
-                errorEl.textContent = '';
-                
-                // Восстанавливаем подсветку при успешной валидации
-                document.querySelectorAll(`tbody#question${questionNum}Body tr`).forEach(tr => {
-                    const hasChecked = tr.querySelector('input[type="checkbox"]:checked');
-                    if (hasChecked) {
-                        tr.style.backgroundColor = '#d5f4e6';
-                        tr.querySelectorAll('td').forEach(td => {
-                            td.style.backgroundColor = '#d5f4e6';
-                            td.style.fontWeight = '600';
-                        });
-                    }
-                });
+                return true;
             }
-
-            // Показываем счетчик
-            let counts = {};
-            for (let colIdx = 0; colIdx < NAMES.length; colIdx++) {
-                const checkboxes = document.querySelectorAll(`.q${questionNum}-col-${colIdx}`);
-                const checkedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
-                const status = checkedCount === maxChecksPerColumn ? '✅' : '❌';
-                counts[NAMES[colIdx]] = `${status} ${checkedCount}/${maxChecksPerColumn}`;
-            }
-            
-            const countStr = Object.entries(counts)
-                .map(([name, count]) => `${name}: ${count}`)
-                .join(' | ');
-            counterEl.textContent = countStr;
-
-            return isValid;
         }
 
-        // Инициализация
-        generateTable(2, 20); // Иконки 1-20
-        generateTable(3, 20); // Иконки 21-40
-        generateTable(4, 10); // Иконки 41-50
 
         // Отправка формы
         document.getElementById('musicForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-
-            // Проверяем все таблицы
-            const isValid2 = validateTable(2);
-            const isValid3 = validateTable(3);
-            const isValid4 = validateTable(4);
-            const q1 = document.querySelector('input[name="question1"]:checked');
-
-            if (!q1) {
-                alert('⚠️ Пожалуйста, выберите, кто вы!');
-                return;
-            }
-
-            if (!isValid2 || !isValid3 || !isValid4) {
-                alert('⚠️ Пожалуйста, исправьте ошибки в таблицах!');
-                return;
-            }
-
-            // Отключаем кнопку
             const submitBtn = document.getElementById('submitBtn');
+            const q1Input = document.querySelector('input[name="question1"]:checked');
+
+            if (!q1Input) {
+                alert('⚠️ Выберите, кто вы!');
+                return;
+            }
+
+            // Проверяем валидность всех строк во всех таблицах
+            const sections = [
+                {key: 'q2', id: 'q2-error'},
+                {key: 'q3', id: 'q3-error'},
+                {key: 'q4', id: 'q4-error'},
+                {key: 'q5', id: 'q5-error'}
+            ]; // Пример массива
+
+            // Формируем FormData
+            const formData = new FormData();
+            formData.append(`entry.${ENTRY_IDS.q1}`, q1Input.value);
+
+            // Сбор данных по строкам
+            // Для каждой категории (q2...q6) берем ID полей из ENTRY_IDS
+            // Предположим, что в Google форме порядок полей соответствует порядку в массиве ENTRY_IDS
+            
+            let totalAnswersCount = 0;
+
+            for (const qKey in ENTRY_IDS) {
+                if (qKey === 'q1') continue;
+
+                const answersPerRow = [];
+                // Находим строки для этого вопроса (они имеют класс или data-атрибут)
+                // В нашем коде мы не присваиваем классы всему телу таблицы qKey, но data-question там есть.
+                // Проблема: Google form response expects ONE entry.XXX per request per field.
+                // Так как у нас поле в форме одно на весь вопрос (если это длинный список), то надо собирать массив строк.
+                
+                // Если в форме GOOGLE форм это отдельный вопрос "Выберите значение", то нужно передать массив:
+                // formData.append(`entry.${ENTRY_IDS[qKey][i]}`, answer);
+                
+                // Получаем все строки текущей секции
+                const rows = document.querySelectorAll(`[data-question="${qKey}"]`);
+                
+                rows.forEach((row, index) => {
+                    const checkedBox = row.querySelector('input:checked');
+                    if (checkedBox) {
+                        const fieldId = ENTRY_IDS[qKey][index]; // Берем ID соответствующего поля в Google Forms
+                        
+                        // ВАЖНО: Если в Google Формах стоит тип "Checkboxes", то можно передать массив: [val]
+                        // Если тип "Dropdown", то просто val
+                        // Допустим, типы разные для разных вопросов. Если там везде одиночный выбор, то:
+                        formData.append(`entry.${fieldId}`, checkedBox.value);
+                        
+                        // Подсчет для проверки заполненности
+                        // Но тут важно: проверяем ли мы, что ВСЕ поля заполнены? Или просто собираем что есть?
+                        // Обычно в викторинах просят заполнить всё. 
+                    }
+                });
+            }
+
+            // Проверка заполненности (опционально)
+            // Посчитать сколько строк вообще ожидается и сколько заполнено.
+            // Проще сделать валидацию перед сабмитом на JS уровне.
+            
+            const emptyRowsCount = document.querySelectorAll('[data-question]').filter(row => !row.querySelector('input:checked')).length;
+            if (emptyRowsCount > 0) {
+                alert(`⚠️ Вы не выбрали ответ для ${emptyRowsCount} треков.`);
+                return;
+            }
+
             submitBtn.disabled = true;
             submitBtn.textContent = 'Отправка...';
 
-            // Собираем данные
-            const formData = new FormData();
-            
-            // Добавляем первый вопрос
-            formData.append(`entry.${ENTRY_IDS.q1}`, q1.value);
-
-            // Добавляем данные для вопроса 2 (20 треков)
-            for (let trackNum = 1; trackNum <= 20; trackNum++) {
-                let q2Answers = [];
-                
-                document.querySelectorAll(`.q2-row-${trackNum}:checked`).forEach(cb => {
-                    q2Answers.push(cb.value);
-                });
-                
-                if (q2Answers.length > 0) {
-                    const entryId = ENTRY_IDS.q2[trackNum - 1];
-                    formData.append(`entry.${entryId}`, q2Answers[0]);
-                }
-            }
-
-            // Добавляем данные для вопроса 3 (20 треков)
-            for (let trackNum = 1; trackNum <= 20; trackNum++) {
-                let q3Answers = [];
-                
-                document.querySelectorAll(`.q3-row-${trackNum}:checked`).forEach(cb => {
-                    q3Answers.push(cb.value);
-                });
-                
-                if (q3Answers.length > 0) {
-                    const entryId = ENTRY_IDS.q3[trackNum - 1];
-                    formData.append(`entry.${entryId}`, q3Answers[0]);
-                }
-            }
-
-            // Добавляем данные для вопроса 4 (10 треков)
-            for (let trackNum = 1; trackNum <= 10; trackNum++) {
-                let q4Answers = [];
-                
-                document.querySelectorAll(`.q4-row-${trackNum}:checked`).forEach(cb => {
-                    q4Answers.push(cb.value);
-                });
-                
-                if (q4Answers.length > 0) {
-                    const entryId = ENTRY_IDS.q4[trackNum - 1];
-                    formData.append(`entry.${entryId}`, q4Answers[0]);
-                }
-            }
-
-            // Отправляем в Google Forms
             try {
-                await fetch(
-                    `https://docs.google.com/forms/u/0/d/e/${FORM_ID}/formResponse`,
-                    {
-                        method: 'POST',
-                        body: formData,
-                        mode: 'no-cors'
-                    }
-                );
+                await fetch(`https://docs.google.com/forms/u/0/d/e/${FORM_ID}/formResponse`, {
+                    method: 'POST',
+                    body: formData,
+                    mode: 'no-cors'
+                });
 
-                // После отправки показываем успех
-                setTimeout(() => {
-                    document.getElementById('successMessage').classList.add('show');
-                    document.getElementById('musicForm').reset();
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Отправить ответы';
-                    
-                    // Сбрасываем подсветку строк
-                    [2, 3, 4].forEach(qNum => {
-                        document.querySelectorAll(`tbody#question${qNum}Body tr`).forEach(tr => {
-                            tr.style.backgroundColor = '';
-                            tr.querySelectorAll('td').forEach(td => {
-                                td.style.backgroundColor = '';
-                                td.style.fontWeight = '';
-                            });
-                        });
-                    });
-                    
-                    // Скрываем сообщение через 5 секунд
-                    setTimeout(() => {
-                        document.getElementById('successMessage').classList.remove('show');
-                    }, 5000);
-                }, 500);
-
-            } catch (error) {
-                console.error('Ошибка:', error);
-                alert('❌ Ошибка при отправке формы. Проверьте консоль (F12)');
+                document.getElementById('successMessage').classList.add('show');
+                document.getElementById('musicForm').reset();
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Отправить ответы';
+                
+                // Скрыть успех через 5 сек
+                setTimeout(() => document.getElementById('successMessage').classList.remove('show'), 5000);
+                
+            } catch (err) {
+                console.error(err);
+                alert('Ошибка отправки формы.');
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Отправить ответы';
             }
